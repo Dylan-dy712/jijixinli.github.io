@@ -1,0 +1,2306 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>心灵探索 - 积极心理测评平台</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --primary-color: #4a86e8;
+            --secondary-color: #6aa4f5;
+            --accent-color: #3d6cb9;
+            --light-color: #f0f7ff;
+            --text-color: #333;
+            --dark-text: #1a1a1a;
+            --card-bg: #ffffff;
+            --shadow-color: rgba(74, 134, 232, 0.15);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #e6f0ff, #cfe2ff);
+            color: var(--text-color);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+        
+        header {
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            color: white;
+            padding: 2rem 1rem;
+            text-align: center;
+            box-shadow: 0 4px 12px var(--shadow-color);
+        }
+        
+        .logo {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .tagline {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+        }
+        
+        .main-menu {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+        
+        .menu-card {
+            background: var(--card-bg);
+            border-radius: 15px;
+            padding: 2.5rem;
+            box-shadow: 0 8px 20px var(--shadow-color);
+            transition: transform 0.3s, box-shadow 0.3s;
+            cursor: pointer;
+            text-align: center;
+            border-top: 5px solid var(--primary-color);
+        }
+        
+        .menu-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 25px var(--shadow-color);
+        }
+        
+        .menu-card h2 {
+            color: var(--dark-text);
+            margin-bottom: 1rem;
+            font-size: 1.8rem;
+        }
+        
+        .menu-card p {
+            font-size: 1rem;
+            margin-bottom: 1.5rem;
+            color: #555;
+        }
+        
+        .menu-icon {
+            font-size: 3.5rem;
+            margin-bottom: 1.5rem;
+            color: var(--primary-color);
+        }
+        
+        .page-title {
+            text-align: center;
+            margin-bottom: 2rem;
+            color: var(--dark-text);
+        }
+        
+        .assessment-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+        
+        .assessment-card {
+            background: var(--card-bg);
+            border-radius: 15px;
+            padding: 1.5rem;
+            box-shadow: 0 5px 15px var(--shadow-color);
+            transition: transform 0.3s, box-shadow 0.3s;
+            cursor: pointer;
+            border-left: 5px solid var(--primary-color);
+        }
+        
+        .assessment-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px var(--shadow-color);
+        }
+        
+        .assessment-card h3 {
+            color: var(--dark-text);
+            margin-bottom: 0.5rem;
+        }
+        
+        .assessment-card p {
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+            color: #666;
+        }
+        
+        .btn {
+            display: inline-block;
+            background: var(--primary-color);
+            color: white;
+            padding: 0.8rem 1.8rem;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: background 0.3s, transform 0.2s;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(74, 134, 232, 0.3);
+        }
+        
+        .btn:hover {
+            background: var(--accent-color);
+            transform: translateY(-2px);
+        }
+        
+        .btn-secondary {
+            background: var(--secondary-color);
+        }
+        
+        .btn-secondary:hover {
+            background: #5a94e5;
+        }
+        
+        .btn-disabled {
+            background: #cccccc;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+        
+        .btn-disabled:hover {
+            transform: none;
+            background: #cccccc;
+        }
+        
+        .assessment-container {
+            background: var(--card-bg);
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 5px 15px var(--shadow-color);
+            margin-bottom: 2rem;
+        }
+        
+        .assessment-intro {
+            margin-bottom: 2rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid #e6e6e6;
+        }
+        
+        .question-container {
+            text-align: center;
+            margin: 2rem 0;
+        }
+        
+        .question-text {
+            font-size: 1.3rem;
+            font-weight: bold;
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            background: var(--light-color);
+            border-radius: 10px;
+            border-left: 4px solid var(--primary-color);
+        }
+        
+        .options {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        
+        .option-label {
+            display: inline-block;
+            padding: 0.8rem 1.5rem;
+            background: white;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: 2px solid #e6e6e6;
+            min-width: 80px;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        
+        .option-label:hover {
+            background: #f0f7ff;
+            border-color: var(--secondary-color);
+        }
+        
+        input[type="radio"] {
+            display: none;
+        }
+        
+        input[type="radio"]:checked + .option-label {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+            box-shadow: 0 2px 8px rgba(74, 134, 232, 0.3);
+        }
+        
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 2rem;
+        }
+        
+        .progress-container {
+            margin: 2rem 0;
+        }
+        
+        .progress-bar {
+            height: 10px;
+            background: #e6e6e6;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+        
+        .progress {
+            height: 100%;
+            background: var(--primary-color);
+            transition: width 0.3s;
+        }
+        
+        .progress-text {
+            text-align: center;
+            margin-top: 0.5rem;
+            font-size: 0.9rem;
+            color: #666;
+        }
+        
+        .result-section {
+            display: none;
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid #e6e6e6;
+        }
+        
+        .result-visualization {
+            margin: 2rem 0;
+            padding: 1.5rem;
+            background: var(--light-color);
+            border-radius: 10px;
+        }
+        
+        .chart-container {
+            position: relative;
+            height: 300px;
+            margin: 1rem 0;
+        }
+        
+        .result-interpretation {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 3px 10px var(--shadow-color);
+            margin-bottom: 1.5rem;
+        }
+        
+        .recommendations {
+            background: #e6f2ff;
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin-top: 1.5rem;
+        }
+        
+        .back-btn {
+            background: var(--primary-color);
+            margin-top: 1rem;
+        }
+        
+        .archives-container {
+            background: var(--card-bg);
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 5px 15px var(--shadow-color);
+            margin-bottom: 2rem;
+        }
+        
+        .archives-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+        
+        .archive-card {
+            background: var(--light-color);
+            border-radius: 10px;
+            padding: 1.5rem;
+            border-left: 4px solid var(--primary-color);
+            transition: transform 0.2s;
+        }
+        
+        .archive-card:hover {
+            transform: translateY(-3px);
+        }
+        
+        .archive-card h3 {
+            color: var(--dark-text);
+            margin-bottom: 0.5rem;
+        }
+        
+        .archive-card p {
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+            color: #666;
+        }
+        
+        .archive-date {
+            font-size: 0.8rem;
+            color: #888;
+            margin-top: 0.5rem;
+        }
+        
+        .comprehensive-analysis {
+            margin-top: 2rem;
+            padding: 1.5rem;
+            background: var(--light-color);
+            border-radius: 10px;
+        }
+        
+        footer {
+            background: linear-gradient(135deg, var(--secondary-color), var(--primary-color));
+            color: white;
+            text-align: center;
+            padding: 2rem 1rem;
+            margin-top: 3rem;
+        }
+        
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .assessment-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .options {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .option-label {
+                width: 80%;
+            }
+            
+            .navigation {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .navigation button {
+                width: 100%;
+            }
+            
+            .archives-list {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">🧠 心灵探索</div>
+        <div class="tagline">专业积极心理测评平台，记录您的心灵成长轨迹</div>
+    </header>
+
+    <div class="container">
+        <!-- 首页 - 主菜单 -->
+        <div id="home-page">
+            <h1 class="page-title">欢迎来到心灵探索平台</h1>
+            <div class="main-menu">
+                <div class="menu-card" id="assessment-menu">
+                    <div class="menu-icon">📊</div>
+                    <h2>心理测评</h2>
+                    <p>进行专业的心理测评，了解自己的心理状态、优势和成长空间</p>
+                    <button class="btn" onclick="showAssessments()">开始测评</button>
+                </div>
+                
+                <div class="menu-card" id="archive-menu">
+                    <div class="menu-icon">📁</div>
+                    <h2>心灵档案</h2>
+                    <p>查看您的测评历史记录和综合分析，追踪心理成长轨迹</p>
+                    <button class="btn" onclick="showArchives()">查看档案</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 心理测评页面 -->
+        <div id="assessment-page" style="display: none;">
+            <button class="btn back-btn" onclick="goHome()">返回首页</button>
+            <h1 class="page-title">心理测评</h1>
+            <p style="text-align: center; margin-bottom: 2rem; color: #666;">选择您想进行的心理测评，深入了解自己的心理状态</p>
+            
+            <div class="assessment-grid">
+                <div class="assessment-card" data-assessment="ppq">
+                    <h3>积极心理资本量表 (PPQ)</h3>
+                    <p>评估个体在面对挑战时的心理资源储备，包含自我效能感、韧性、希望和乐观四个维度。</p>
+                    <button class="btn start-btn" data-assessment="ppq">开始测评</button>
+                </div>
+                
+                <div class="assessment-card" data-assessment="swls">
+                    <h3>生活满意度量表 (SWLS)</h3>
+                    <p>测量个体对自身生活状态的主观接纳程度，了解您对当前生活的满意水平。</p>
+                    <button class="btn start-btn" data-assessment="swls">开始测评</button>
+                </div>
+                
+                <div class="assessment-card" data-assessment="mlq">
+                    <h3>生命意义感量表 (MLQ)</h3>
+                    <p>评估个体的拥有意义感和寻求意义感，帮助您探索生命的意义与方向。</p>
+                    <button class="btn start-btn" data-assessment="mlq">开始测评</button>
+                </div>
+                
+                <div class="assessment-card" data-assessment="panas">
+                    <h3>积极情绪与消极情绪量表 (PANAS)</h3>
+                    <p>测量个体在特定时期内的情绪状态，区分积极情绪与消极情绪两个独立维度。</p>
+                    <button class="btn start-btn" data-assessment="panas">开始测评</button>
+                </div>
+                
+                <div class="assessment-card" data-assessment="skus">
+                    <h3>优势知识与优势使用量表 (SKUS)</h3>
+                    <p>评估个体对自身性格优势的认知程度与日常应用频率。</p>
+                    <button class="btn start-btn" data-assessment="skus">开始测评</button>
+                </div>
+                
+                <div class="assessment-card" data-assessment="ashs">
+                    <h3>成人状态希望量表 (ASHS)</h3>
+                    <p>评估成年人在日常生活动态中维持希望的能力。</p>
+                    <button class="btn start-btn" data-assessment="ashs">开始测评</button>
+                </div>
+                
+                <div class="assessment-card" data-assessment="ers">
+                    <h3>自我韧性量表 (ERS)</h3>
+                    <p>评估个体在面对逆境时的自我调节与恢复能力。</p>
+                    <button class="btn start-btn" data-assessment="ers">开始测评</button>
+                </div>
+                
+                <div class="assessment-card" data-assessment="erq">
+                    <h3>情绪调节问卷 (ERQ)</h3>
+                    <p>测量个体在情绪产生后常用的两种核心调节方式。</p>
+                    <button class="btn start-btn" data-assessment="erq">开始测评</button>
+                </div>
+                
+                <div class="assessment-card" data-assessment="rpws">
+                    <h3>心理幸福感量表 (RPWS)</h3>
+                    <p>评估个体在长期发展中实现潜能的程度，关注深度心理成长。</p>
+                    <button class="btn start-btn" data-assessment="rpws">开始测评</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 心灵档案页面 -->
+        <div id="archive-page" style="display: none;">
+            <button class="btn back-btn" onclick="goHome()">返回首页</button>
+            <h1 class="page-title">心灵档案</h1>
+            <p style="text-align: center; margin-bottom: 2rem; color: #666;">查看您的测评历史记录和综合分析</p>
+            
+            <div class="archives-container">
+                <h2>测评历史</h2>
+                <div class="archives-list" id="archives-list">
+                    <!-- 测评记录将通过JavaScript动态加载 -->
+                </div>
+                
+                <div class="comprehensive-analysis">
+                    <h2>综合分析</h2>
+                    <div id="comprehensive-analysis-content">
+                        <p>您还没有完成足够的测评来生成综合分析。完成至少3个不同类型的测评后，系统将为您生成全面的心理状态分析。</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- PPQ 测评页面 -->
+        <div id="ppq-page" class="assessment-page" style="display: none;">
+            <button class="btn back-btn" onclick="goBackToAssessments()">返回测评列表</button>
+            <h1 class="page-title">积极心理资本量表 (PPQ)</h1>
+            
+            <div class="assessment-container">
+                <div class="assessment-intro">
+                    <h2>测评介绍</h2>
+                    <p>积极心理资本量表(PPQ)作为核心评估工具，核心是评估个体在面对挑战时的心理资源储备，区别于传统关注"心理问题"的量表，更侧重挖掘人的积极潜能。该量表包含26个项目，采用Likert7级计分，测试得分越高，反应被试个体积极心理资本越好。</p>
+                </div>
+                
+                <div class="progress-container">
+                    <div class="progress-bar">
+                        <div class="progress" id="ppq-progress" style="width: 0%"></div>
+                    </div>
+                    <div class="progress-text" id="ppq-progress-text">第 0 题 / 共 26 题</div>
+                </div>
+                
+                <div class="question-container">
+                    <div class="question-text" id="ppq-question-text"></div>
+                    <div class="options" id="ppq-options">
+                        <!-- 选项将通过JavaScript动态加载 -->
+                    </div>
+                </div>
+                
+                <div class="navigation">
+                    <button class="btn btn-secondary" id="ppq-prev-btn" onclick="prevQuestion('ppq')" disabled>上一题</button>
+                    <button class="btn" id="ppq-next-btn" onclick="nextQuestion('ppq')">下一题</button>
+                </div>
+                
+                <div id="ppq-result" class="result-section">
+                    <h2>测评结果</h2>
+                    <div class="result-visualization">
+                        <h3>心理资本维度分析</h3>
+                        <div class="chart-container">
+                            <canvas id="ppq-radar-chart"></canvas>
+                        </div>
+                    </div>
+                    
+                    <div class="result-interpretation">
+                        <h3>结果解读</h3>
+                        <p id="ppq-interpretation"></p>
+                    </div>
+                    
+                    <div class="recommendations">
+                        <h3>个性化建议</h3>
+                        <p id="ppq-recommendations"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SWLS 测评页面 -->
+        <div id="swls-page" class="assessment-page" style="display: none;">
+            <button class="btn back-btn" onclick="goBackToAssessments()">返回测评列表</button>
+            <h1 class="page-title">生活满意度量表 (SWLS)</h1>
+            
+            <div class="assessment-container">
+                <div class="assessment-intro">
+                    <h2>测评介绍</h2>
+                    <p>生活满意度量表(SWLS)核心是测量个体对自身生活状态的主观接纳程度，该量表包含5个项目，采用Likert7级计分，测试得分越高，反应被试个体生活满意度水平越高。</p>
+                </div>
+                
+                <div class="progress-container">
+                    <div class="progress-bar">
+                        <div class="progress" id="swls-progress" style="width: 0%"></div>
+                    </div>
+                    <div class="progress-text" id="swls-progress-text">第 0 题 / 共 5 题</div>
+                </div>
+                
+                <div class="question-container">
+                    <div class="question-text" id="swls-question-text"></div>
+                    <div class="options" id="swls-options">
+                        <!-- 选项将通过JavaScript动态加载 -->
+                    </div>
+                </div>
+                
+                <div class="navigation">
+                    <button class="btn btn-secondary" id="swls-prev-btn" onclick="prevQuestion('swls')" disabled>上一题</button>
+                    <button class="btn" id="swls-next-btn" onclick="nextQuestion('swls')">下一题</button>
+                </div>
+                
+                <div id="swls-result" class="result-section">
+                    <h2>测评结果</h2>
+                    <div class="result-visualization">
+                        <h3>生活满意度得分</h3>
+                        <div class="chart-container">
+                            <canvas id="swls-bar-chart"></canvas>
+                        </div>
+                    </div>
+                    
+                    <div class="result-interpretation">
+                        <h3>结果解读</h3>
+                        <p id="swls-interpretation"></p>
+                    </div>
+                    
+                    <div class="recommendations">
+                        <h3>个性化建议</h3>
+                        <p id="swls-recommendations"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- MLQ 测评页面 -->
+        <div id="mlq-page" class="assessment-page" style="display: none;">
+            <button class="btn back-btn" onclick="goBackToAssessments()">返回测评列表</button>
+            <h1 class="page-title">生命意义感量表 (MLQ)</h1>
+            
+            <div class="assessment-container">
+                <div class="assessment-intro">
+                    <h2>测评介绍</h2>
+                    <p>生命意义感量表(MLQ)核心是评估个体的拥有意义感和寻求意义感。该量表包含10个项目，分两个维度（各5项），采用Likert7级计分，测试得分越高，反应被试个体意义体验或意义寻求水平越高。</p>
+                </div>
+                
+                <div class="progress-container">
+                    <div class="progress-bar">
+                        <div class="progress" id="mlq-progress" style="width: 0%"></div>
+                    </div>
+                    <div class="progress-text" id="mlq-progress-text">第 0 题 / 共 10 题</div>
+                </div>
+                
+                <div class="question-container">
+                    <div class="question-text" id="mlq-question-text"></div>
+                    <div class="options" id="mlq-options">
+                        <!-- 选项将通过JavaScript动态加载 -->
+                    </div>
+                </div>
+                
+                <div class="navigation">
+                    <button class="btn btn-secondary" id="mlq-prev-btn" onclick="prevQuestion('mlq')" disabled>上一题</button>
+                    <button class="btn" id="mlq-next-btn" onclick="nextQuestion('mlq')">下一题</button>
+                </div>
+                
+                <div id="mlq-result" class="result-section">
+                    <h2>测评结果</h2>
+                    <div class="result-visualization">
+                        <h3>生命意义感分析</h3>
+                        <div class="chart-container">
+                            <canvas id="mlq-scatter-chart"></canvas>
+                        </div>
+                    </div>
+                    
+                    <div class="result-interpretation">
+                        <h3>结果解读</h3>
+                        <p id="mlq-interpretation"></p>
+                    </div>
+                    
+                    <div class="recommendations">
+                        <h3>个性化建议</h3>
+                        <p id="mlq-recommendations"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- PANAS 测评页面 -->
+        <div id="panas-page" class="assessment-page" style="display: none;">
+            <button class="btn back-btn" onclick="goBackToAssessments()">返回测评列表</button>
+            <h1 class="page-title">积极情绪与消极情绪量表 (PANAS)</h1>
+            
+            <div class="assessment-container">
+                <div class="assessment-intro">
+                    <h2>测评介绍</h2>
+                    <p>积极情绪与消极情绪量表(PANAS)核心是测量个体在特定时期内的情绪状态，区分"积极情绪（PA）"与"消极情绪（NA）"两个独立维度，不评估情绪的"原因"，仅描述"感受强度"。</p>
+                </div>
+                
+                <div class="progress-container">
+                    <div class="progress-bar">
+                        <div class="progress" id="panas-progress" style="width: 0%"></div>
+                    </div>
+                    <div class="progress-text" id="panas-progress-text">第 0 题 / 共 20 题</div>
+                </div>
+                
+                <div class="question-container">
+                    <div class="question-text" id="panas-question-text"></div>
+                    <div class="options" id="panas-options">
+                        <!-- 选项将通过JavaScript动态加载 -->
+                    </div>
+                </div>
+                
+                <div class="navigation">
+                    <button class="btn btn-secondary" id="panas-prev-btn" onclick="prevQuestion('panas')" disabled>上一题</button>
+                    <button class="btn" id="panas-next-btn" onclick="nextQuestion('panas')">下一题</button>
+                </div>
+                
+                <div id="panas-result" class="result-section">
+                    <h2>测评结果</h2>
+                    <div class="result-visualization">
+                        <h3>情绪状态分析</h3>
+                        <div class="chart-container">
+                            <canvas id="panas-bar-chart"></canvas>
+                        </div>
+                    </div>
+                    
+                    <div class="result-interpretation">
+                        <h3>结果解读</h3>
+                        <p id="panas-interpretation"></p>
+                    </div>
+                    
+                    <div class="recommendations">
+                        <h3>个性化建议</h3>
+                        <p id="panas-recommendations"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SKUS 测评页面 -->
+        <div id="skus-page" class="assessment-page" style="display: none;">
+            <button class="btn back-btn" onclick="goBackToAssessments()">返回测评列表</button>
+            <h1 class="page-title">优势知识与优势使用量表 (SKUS)</h1>
+            
+            <div class="assessment-container">
+                <div class="assessment-intro">
+                    <h2>测评介绍</h2>
+                    <p>优势知识与优势使用量表(SKUS)核心是评估个体对自身性格优势的认知程度与"日常应用频率"，该量表包含21个项目，采用Likert7级计分，评估用户的优势知识和优势使用程度。</p>
+                </div>
+                
+                <div class="progress-container">
+                    <div class="progress-bar">
+                        <div class="progress" id="skus-progress" style="width: 0%"></div>
+                    </div>
+                    <div class="progress-text" id="skus-progress-text">第 0 题 / 共 21 题</div>
+                </div>
+                
+                <div class="question-container">
+                    <div class="question-text" id="skus-question-text"></div>
+                    <div class="options" id="skus-options">
+                        <!-- 选项将通过JavaScript动态加载 -->
+                    </div>
+                </div>
+                
+                <div class="navigation">
+                    <button class="btn btn-secondary" id="skus-prev-btn" onclick="prevQuestion('skus')" disabled>上一题</button>
+                    <button class="btn" id="skus-next-btn" onclick="nextQuestion('skus')">下一题</button>
+                </div>
+                
+                <div id="skus-result" class="result-section">
+                    <h2>测评结果</h2>
+                    <div class="result-visualization">
+                        <h3>优势知识与使用分析</h3>
+                        <div class="chart-container">
+                            <canvas id="skus-bar-chart"></canvas>
+                        </div>
+                    </div>
+                    
+                    <div class="result-interpretation">
+                        <h3>结果解读</h3>
+                        <p id="skus-interpretation"></p>
+                    </div>
+                    
+                    <div class="recommendations">
+                        <h3>个性化建议</h3>
+                        <p id="skus-recommendations"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ASHS 测评页面 -->
+        <div id="ashs-page" class="assessment-page" style="display: none;">
+            <button class="btn back-btn" onclick="goBackToAssessments()">返回测评列表</button>
+            <h1 class="page-title">成人状态希望量表 (ASHS)</h1>
+            
+            <div class="assessment-container">
+                <div class="assessment-intro">
+                    <h2>测评介绍</h2>
+                    <p>成人状态希望量表(ASHS)核心是评估成年人在日常生活动态中维持希望的能力。该量表包含6个项目，采用Likert8级计分，测试得分越高，反应被试个体当前希望水平越高。</p>
+                </div>
+                
+                <div class="progress-container">
+                    <div class="progress-bar">
+                        <div class="progress" id="ashs-progress" style="width: 0%"></div>
+                    </div>
+                    <div class="progress-text" id="ashs-progress-text">第 0 题 / 共 6 题</div>
+                </div>
+                
+                <div class="question-container">
+                    <div class="question-text" id="ashs-question-text"></div>
+                    <div class="options" id="ashs-options">
+                        <!-- 选项将通过JavaScript动态加载 -->
+                    </div>
+                </div>
+                
+                <div class="navigation">
+                    <button class="btn btn-secondary" id="ashs-prev-btn" onclick="prevQuestion('ashs')" disabled>上一题</button>
+                    <button class="btn" id="ashs-next-btn" onclick="nextQuestion('ashs')">下一题</button>
+                </div>
+                
+                <div id="ashs-result" class="result-section">
+                    <h2>测评结果</h2>
+                    <div class="result-visualization">
+                        <h3>希望水平分析</h3>
+                        <div class="chart-container">
+                            <canvas id="ashs-bar-chart"></canvas>
+                        </div>
+                    </div>
+                    
+                    <div class="result-interpretation">
+                        <h3>结果解读</h3>
+                        <p id="ashs-interpretation"></p>
+                    </div>
+                    
+                    <div class="recommendations">
+                        <h3>个性化建议</h3>
+                        <p id="ashs-recommendations"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ERS 测评页面 -->
+        <div id="ers-page" class="assessment-page" style="display: none;">
+            <button class="btn back-btn" onclick="goBackToAssessments()">返回测评列表</button>
+            <h1 class="page-title">自我韧性量表 (ERS)</h1>
+            
+            <div class="assessment-container">
+                <div class="assessment-intro">
+                    <h2>测评介绍</h2>
+                    <p>自我韧性量表(ERS)核心是评估个体在面对逆境时的自我调节与恢复能力。该量表包含14个项目，采用Likert4级计分，测试得分越高，反应被试个自我韧性水平越高。</p>
+                </div>
+                
+                <div class="progress-container">
+                    <div class="progress-bar">
+                        <div class="progress" id="ers-progress" style="width: 0%"></div>
+                    </div>
+                    <div class="progress-text" id="ers-progress-text">第 0 题 / 共 14 题</div>
+                </div>
+                
+                <div class="question-container">
+                    <div class="question-text" id="ers-question-text"></div>
+                    <div class="options" id="ers-options">
+                        <!-- 选项将通过JavaScript动态加载 -->
+                    </div>
+                </div>
+                
+                <div class="navigation">
+                    <button class="btn btn-secondary" id="ers-prev-btn" onclick="prevQuestion('ers')" disabled>上一题</button>
+                    <button class="btn" id="ers-next-btn" onclick="nextQuestion('ers')">下一题</button>
+                </div>
+                
+                <div id="ers-result" class="result-section">
+                    <h2>测评结果</h2>
+                    <div class="result-visualization">
+                        <h3>自我韧性水平</h3>
+                        <div class="chart-container">
+                            <canvas id="ers-gauge-chart"></canvas>
+                        </div>
+                    </div>
+                    
+                    <div class="result-interpretation">
+                        <h3>结果解读</h3>
+                        <p id="ers-interpretation"></p>
+                    </div>
+                    
+                    <div class="recommendations">
+                        <h3>个性化建议</h3>
+                        <p id="ers-recommendations"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ERQ 测评页面 -->
+        <div id="erq-page" class="assessment-page" style="display: none;">
+            <button class="btn back-btn" onclick="goBackToAssessments()">返回测评列表</button>
+            <h1 class="page-title">情绪调节问卷 (ERQ)</h1>
+            
+            <div class="assessment-container">
+                <div class="assessment-intro">
+                    <h2>测评介绍</h2>
+                    <p>情绪调节问卷(ERQ)核心是测量个体在情绪产生后常用的两种核心调节方式。该量表包含10个项目，采用Likert7级计分，测试得分越高，反应被试个体当前希望水平越高。</p>
+                </div>
+                
+                <div class="progress-container">
+                    <div class="progress-bar">
+                        <div class="progress" id="erq-progress" style="width: 0%"></div>
+                    </div>
+                    <div class="progress-text" id="erq-progress-text">第 0 题 / 共 10 题</div>
+                </div>
+                
+                <div class="question-container">
+                    <div class="question-text" id="erq-question-text"></div>
+                    <div class="options" id="erq-options">
+                        <!-- 选项将通过JavaScript动态加载 -->
+                    </div>
+                </div>
+                
+                <div class="navigation">
+                    <button class="btn btn-secondary" id="erq-prev-btn" onclick="prevQuestion('erq')" disabled>上一题</button>
+                    <button class="btn" id="erq-next-btn" onclick="nextQuestion('erq')">下一题</button>
+                </div>
+                
+                <div id="erq-result" class="result-section">
+                    <h2>测评结果</h2>
+                    <div class="result-visualization">
+                        <h3>情绪调节策略倾向</h3>
+                        <div class="chart-container">
+                            <canvas id="erq-radar-chart"></canvas>
+                        </div>
+                    </div>
+                    
+                    <div class="result-interpretation">
+                        <h3>结果解读</h3>
+                        <p id="erq-interpretation"></p>
+                    </div>
+                    
+                    <div class="recommendations">
+                        <h3>个性化建议</h3>
+                        <p id="erq-recommendations"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- RPWS 测评页面 -->
+        <div id="rpws-page" class="assessment-page" style="display: none;">
+            <button class="btn back-btn" onclick="goBackToAssessments()">返回测评列表</button>
+            <h1 class="page-title">心理幸福感量表 (RPWS)</h1>
+            
+            <div class="assessment-container">
+                <div class="assessment-intro">
+                    <h2>测评介绍</h2>
+                    <p>心理幸福感量表(RPWS)核心是评估个体在长期发展中实现潜能的程度，关注"深度心理成长"。该量表包含18个项目，采用Likert6级计分，测试得分越高，反应被试个心理幸福感越高。</p>
+                </div>
+                
+                <div class="progress-container">
+                    <div class="progress-bar">
+                        <div class="progress" id="rpws-progress" style="width: 0%"></div>
+                    </div>
+                    <div class="progress-text" id="rpws-progress-text">第 0 题 / 共 18 题</div>
+                </div>
+                
+                <div class="question-container">
+                    <div class="question-text" id="rpws-question-text"></div>
+                    <div class="options" id="rpws-options">
+                        <!-- 选项将通过JavaScript动态加载 -->
+                    </div>
+                </div>
+                
+                <div class="navigation">
+                    <button class="btn btn-secondary" id="rpws-prev-btn" onclick="prevQuestion('rpws')" disabled>上一题</button>
+                    <button class="btn" id="rpws-next-btn" onclick="nextQuestion('rpws')">下一题</button>
+                </div>
+                
+                <div id="rpws-result" class="result-section">
+                    <h2>测评结果</h2>
+                    <div class="result-visualization">
+                        <h3>心理幸福感维度分析</h3>
+                        <div class="chart-container">
+                            <canvas id="rpws-radar-chart"></canvas>
+                        </div>
+                    </div>
+                    
+                    <div class="result-interpretation">
+                        <h3>结果解读</h3>
+                        <p id="rpws-interpretation"></p>
+                    </div>
+                    
+                    <div class="recommendations">
+                        <h3>个性化建议</h3>
+                        <p id="rpws-recommendations"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <footer>
+        <p>心灵探索 &copy; 2025 - 专业积极心理测评平台，记录您的心灵成长轨迹</p>
+        <p>本测评结果仅供参考，如需专业心理帮助，请咨询专业的心理健康人员</p>
+    </footer>
+
+    <script>
+        // 量表数据
+        const assessments = {
+            ppq: {
+                title: "积极心理资本量表 (PPQ)",
+                description: "评估个体在面对挑战时的心理资源储备，包含自我效能感、韧性、希望和乐观四个维度。",
+                questions: [
+                    "很多人欣赏我的才干。",
+                    "我不爱生气。",
+                    "我的见解和能力超过一般人。",
+                    "遇到挫折时，我能很快地恢复过来。",
+                    "我对自己的能力很有信心。",
+                    "生活中的不愉快，我很少在意。",
+                    "我总是能出色地完成任务。",
+                    "糟糕的经历会让我郁闷很久。",
+                    "面对困难时我会很冷静地寻求解决的方法。",
+                    "我觉得自己活得很累。",
+                    "我乐于承担困难和有挑战性的工作。",
+                    "不顺心的时候，我容易垂头丧气。",
+                    "身处逆境时，我会积极尝试不同的策略。",
+                    "压力大的时候，我会吃不好、睡不香。",
+                    "我积极地学习和工作，以实现自己的理想。",
+                    "情况不确定时，我总是预期会有好的结果。",
+                    "我正在为实现自己的目标而努力。",
+                    "我总是看到事物好的一面。",
+                    "我充满信心地追求自己的目标。",
+                    "我觉得社会上好人还是占绝大多数。",
+                    "对自己的学习和生活，我有一定的规划。",
+                    "大多数的时候，我都是意气风发的。",
+                    "我很清楚自己想要什么样的生活。",
+                    "我觉得生活是美好的。",
+                    "我也不知道自己的生活目标是什么。",
+                    "我觉得前途充满希望。"
+                ],
+                dimensions: {
+                    "自我效能感": [1, 3, 5, 7, 9, 11, 13],
+                    "韧性": [2, 4, 6, 8, 10, 12, 14],
+                    "希望": [15, 17, 19, 21, 23, 25],
+                    "乐观": [16, 18, 20, 22, 24, 26]
+                },
+                reverseItems: [8, 10, 12, 14, 25],
+                currentQuestion: 0,
+                answers: []
+            },
+            swls: {
+                title: "生活满意度量表 (SWLS)",
+                description: "测量个体对自身生活状态的主观接纳程度，了解您对当前生活的满意水平。",
+                questions: [
+                    "我生活中的大多数方面接近我的理想。",
+                    "我的生活条件很好。",
+                    "我对自己的生活感到满意。",
+                    "迄今为止我在生活中得到了想得到的重要东西。",
+                    "如果我能回头重走人生路，我几乎不想改变任何东西。"
+                ],
+                scoreRanges: [
+                    {min: 31, max: 35, level: "极高生活满意度", description: "你对生活整体接纳度高，易感受到幸福感"},
+                    {min: 26, max: 30, level: "较高生活满意度", description: "你对生活整体满意，能够积极面对生活中的挑战"},
+                    {min: 21, max: 25, level: "中等生活满意度", description: "你对生活基本满意，但某些方面仍有提升空间"},
+                    {min: 15, max: 20, level: "较低生活满意度", description: "当前生活存在可优化空间，可尝试从'小目标'入手调整"},
+                    {min: 5, max: 14, level: "极低生活满意度", description: "建议关注生活中的积极因素，寻求专业帮助改善生活状态"}
+                ],
+                currentQuestion: 0,
+                answers: []
+            },
+            mlq: {
+                title: "生命意义感量表 (MLQ)",
+                description: "评估个体的拥有意义感和寻求意义感，帮助您探索生命的意义与方向。",
+                questions: [
+                    "我很了解自己的人生意义。",
+                    "我正在寻找某种使我的生活有意义的东西。",
+                    "我总是在寻找自己的人生目标。",
+                    "我的生活有很明确的目标感。",
+                    "我很清楚是什么使我的生活感觉起来是重要的东西。",
+                    "我已经发现了一个令人满意的人生目标。",
+                    "我一直在寻找某样能使我的生活感觉起来是重要的东西。",
+                    "我正在寻找自己人生的目标和'使命'。",
+                    "我的生活没有很明确的目标。",
+                    "我正在寻找自己人生的意义。"
+                ],
+                dimensions: {
+                    "拥有意义感": [1, 4, 5, 6, 9],
+                    "寻求意义感": [2, 3, 7, 8, 10]
+                },
+                reverseItems: [9],
+                currentQuestion: 0,
+                answers: []
+            },
+            panas: {
+                title: "积极情绪与消极情绪量表 (PANAS)",
+                description: "测量个体在特定时期内的情绪状态，区分积极情绪与消极情绪两个独立维度。",
+                questions: [
+                    "感兴趣的",
+                    "心烦的",
+                    "精神活力高的",
+                    "心神不宁的",
+                    "劲头足的",
+                    "内疚的",
+                    "恐惧的",
+                    "敌意的",
+                    "热情的",
+                    "自豪的",
+                    "易怒的",
+                    "警觉性高的",
+                    "害羞的",
+                    "备受鼓舞的",
+                    "紧张的",
+                    "意志坚定的",
+                    "注意力集中的",
+                    "坐立不安的",
+                    "有活力的",
+                    "害怕的"
+                ],
+                dimensions: {
+                    "积极情绪": [1, 3, 5, 9, 10, 12, 14, 16, 17, 19],
+                    "消极情绪": [2, 4, 6, 7, 8, 11, 13, 15, 18, 20]
+                },
+                currentQuestion: 0,
+                answers: []
+            },
+            skus: {
+                title: "优势知识与优势使用量表 (SKUS)",
+                description: "评估个体对自身性格优势的认知程度与日常应用频率。",
+                questions: [
+                    "其他人能够看到我所具有的优势。",
+                    "我知道我做得最好的是什么。",
+                    "我能意识到自己的优势。",
+                    "我知道我所擅长的事情是什么。",
+                    "我非常了解自己的优势。",
+                    "我知道我能够做得最好的事情是什么。",
+                    "我知道什么时候自己处于最佳状态。",
+                    "我经常能够做我擅长的事情。",
+                    "我总是能发挥自己的优势。",
+                    "我总是能够使用我自己的优势。",
+                    "我通过运用自己的优势来获得自己想要的东西。",
+                    "我每天都使用自己的优势。",
+                    "我利用自己的优势以得到自己想要的生活。",
+                    "我的工作给了我很多机会去使用自己的优势。",
+                    "我的生活给我提供了很多不同的途径去发挥自己的优势。",
+                    "我能够顺其自然地发挥自己的优势。",
+                    "我发现自己在做事情时非常容易运用到自己的优势。",
+                    "我能够在很多不同的情境中使用自己的优势。",
+                    "我大部分时间都花在做我擅长做的事情上面。",
+                    "使用自己的优势是我非常非常熟悉的事情。",
+                    "我能够用许多不同的方法来使用自己的优势。"
+                ],
+                dimensions: {
+                    "优势知识": [1, 2, 3, 4, 5, 6, 7],
+                    "优势使用": [8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21]
+                },
+                currentQuestion: 0,
+                answers: []
+            },
+            ashs: {
+                title: "成人状态希望量表 (ASHS)",
+                description: "评估成年人在日常生活动态中维持希望的能力。",
+                questions: [
+                    "当我陷入困境的时候，我会想出各种方法让自己摆脱困境。",
+                    "我感觉自己现在精力充沛，正努力实现我的目标。",
+                    "我现在遇到的任何问题都有许多解决方法。",
+                    "此时此刻，我认为自己是相当成功的。",
+                    "我能想出许多办法去实现自己当前的目标。",
+                    "在这个时候，我正在实现为自己设定的目标。"
+                ],
+                dimensions: {
+                    "动力思维": [2, 4, 6],
+                    "路径思维": [1, 3, 5]
+                },
+                currentQuestion: 0,
+                answers: []
+            },
+            ers: {
+                title: "自我韧性量表 (ERS)",
+                description: "评估个体在面对逆境时的自我调节与恢复能力。",
+                questions: [
+                    "我对朋友很慷慨。",
+                    "我能很快摆脱惊吓，并从其中恢复过来。",
+                    "我乐于应付新的和非同寻常的局面。",
+                    "我通常能给人们留下很好的印象。",
+                    "我乐于去品尝从来没有吃过的食物。",
+                    "我被认为是一个精力非常充沛的人。",
+                    "我乐于选择不同的路径到达我熟悉的地方。",
+                    "比起大多数人我更有好奇心。",
+                    "我遇到的大多数人都很可爱。",
+                    "行动之前我总是周密地考虑一些事情。",
+                    "我喜欢做新奇和不同凡响的事情。",
+                    "我的日常生活充满了很多让我感兴趣的事情。",
+                    "我乐于把自己描述为个性很强的人。",
+                    "我能很快并适时地从对某人的气恼中摆脱出来。"
+                ],
+                scoreRanges: [
+                    {min: 47, max: 56, level: "非常高的心理弹性特质", description: "您具有很强的心理弹性，能够很好地应对生活中的压力和挑战"},
+                    {min: 35, max: 46, level: "高心理弹性特质", description: "您有良好的心理弹性，能够较好地应对生活中的变化和挑战"},
+                    {min: 23, max: 34, level: "一般心理弹性特质", description: "您的心理弹性处于一般水平，在某些情况下可能需要更多支持"},
+                    {min: 14, max: 22, level: "较低心理弹性特质", description: "您的心理弹性有待提升，建议学习更多应对压力的策略"}
+                ],
+                currentQuestion: 0,
+                answers: []
+            },
+            erq: {
+                title: "情绪调节问卷 (ERQ)",
+                description: "测量个体在情绪产生后常用的两种核心调节方式。",
+                questions: [
+                    "当我想感受一些积极的情绪(如快乐或高兴)时，我会改变自己思考问题的角度",
+                    "我不会表露自己的情绪",
+                    "当我想少感受一些消极的情绪(如悲伤或愤怒)时，我会改变自己思考问题的角度",
+                    "当感受到积极情绪时，我会很小心地不让它们表露出来",
+                    "在面对压力情境时，我会使自己以一种有助于保持平静的方式来考虑它",
+                    "我控制自己情绪的方式是不表达它们",
+                    "当我想多感受一些积极的情绪时，我会改变自己对情境的考虑方式",
+                    "我会通过改变对情境的考虑方式，来控制自己的情绪",
+                    "当感受到消极的情绪时，我确定不会表露它们",
+                    "当我想少感受一些消极的情绪时，我会改变自己对情境的考虑方式"
+                ],
+                dimensions: {
+                    "认知重评": [1, 3, 5, 7, 8, 10],
+                    "表达抑制": [2, 4, 6, 9]
+                },
+                currentQuestion: 0,
+                answers: []
+            },
+            rpws: {
+                title: "心理幸福感量表 (RPWS)",
+                description: "评估个体在长期发展中实现潜能的程度，关注深度心理成长。",
+                questions: [
+                    "我喜欢和家人或朋友聊天和分享个人话题。",
+                    "人们形容我是个肯付出的人，愿意花时间在别人身上",
+                    "我知道我可以信任我的朋友，而他们也知道可以信任我",
+                    "我对自己的主张很有信心，即使与多数人的共识不同",
+                    "我不是那种会屈服于社会压力而表现出某些行为或思考方式的人",
+                    "我以自己认为重要的价值来评论自己，而非依照别人的标准",
+                    "整体而言，我觉得自己能掌管生活情境",
+                    "我能管理好日常生活中该做的事情",
+                    "我通常能管理好个人财务与事物",
+                    "我认为有新的体验来激发自己如何看待自我及世界很重要",
+                    "对我而言，人生是持续学习、改变和成长的过程",
+                    "我欣喜自己看事情的观点逐年改变且成熟",
+                    "我喜欢为未来制订计划，并努力实践它",
+                    "我会积极完成已制订的计划",
+                    "我不是那种对人生毫无目标的人",
+                    "当我回顾过往，对于大多数事情的结果我感到满意",
+                    "整体来说，我认为自己有自信而且积极",
+                    "当我和身边朋友相比时，我觉得自己还不错"
+                ],
+                dimensions: {
+                    "良好人际关系": [1, 2, 3],
+                    "自主性": [4, 5, 6],
+                    "环境控制": [7, 8, 9],
+                    "个人成长": [10, 11, 12],
+                    "生活目标": [13, 14, 15],
+                    "自我接纳": [16, 17, 18]
+                },
+                currentQuestion: 0,
+                answers: []
+            }
+        };
+
+        // 存储用户测评记录
+        let userArchives = JSON.parse(localStorage.getItem('psychologicalAssessments')) || [];
+
+        // 页面导航
+        document.querySelectorAll('.start-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const assessment = this.getAttribute('data-assessment');
+                showAssessmentPage(assessment);
+            });
+        });
+
+        function showAssessments() {
+            document.getElementById('home-page').style.display = 'none';
+            document.getElementById('archive-page').style.display = 'none';
+            document.getElementById('assessment-page').style.display = 'block';
+        }
+
+        function showArchives() {
+            document.getElementById('home-page').style.display = 'none';
+            document.getElementById('assessment-page').style.display = 'none';
+            document.getElementById('archive-page').style.display = 'block';
+            
+            // 加载测评记录
+            loadArchives();
+        }
+
+        function goHome() {
+            document.getElementById('home-page').style.display = 'block';
+            document.getElementById('assessment-page').style.display = 'none';
+            document.getElementById('archive-page').style.display = 'none';
+            document.querySelectorAll('.assessment-page').forEach(page => {
+                page.style.display = 'none';
+            });
+        }
+
+        function goBackToAssessments() {
+            document.getElementById('assessment-page').style.display = 'block';
+            document.querySelectorAll('.assessment-page').forEach(page => {
+                page.style.display = 'none';
+            });
+        }
+
+        function showAssessmentPage(assessment) {
+            document.getElementById('assessment-page').style.display = 'none';
+            document.querySelectorAll('.assessment-page').forEach(page => {
+                page.style.display = 'none';
+            });
+            document.getElementById(`${assessment}-page`).style.display = 'block';
+            
+            // 重置当前题目和答案
+            assessments[assessment].currentQuestion = 0;
+            assessments[assessment].answers = [];
+            
+            // 加载第一题
+            loadQuestion(assessment);
+        }
+
+        // 加载题目
+        function loadQuestion(assessment) {
+            const currentQuestion = assessments[assessment].currentQuestion;
+            const totalQuestions = assessments[assessment].questions.length;
+            
+            // 更新进度条
+            const progressPercentage = ((currentQuestion + 1) / totalQuestions) * 100;
+            document.getElementById(`${assessment}-progress`).style.width = `${progressPercentage}%`;
+            document.getElementById(`${assessment}-progress-text`).textContent = `第 ${currentQuestion + 1} 题 / 共 ${totalQuestions} 题`;
+            
+            // 更新题目文本
+            document.getElementById(`${assessment}-question-text`).textContent = 
+                `${currentQuestion + 1}. ${assessments[assessment].questions[currentQuestion]}`;
+            
+            // 更新选项
+            const optionsContainer = document.getElementById(`${assessment}-options`);
+            optionsContainer.innerHTML = '';
+            
+            // 根据量表类型确定选项数量
+            let optionCount = 7; // 默认7级计分
+            if (assessment === 'panas') optionCount = 5;
+            if (assessment === 'ers') optionCount = 4;
+            if (assessment === 'rpws') optionCount = 6;
+            if (assessment === 'ashs') optionCount = 8;
+            
+            for (let i = 1; i <= optionCount; i++) {
+                const optionId = `${assessment}-q${currentQuestion+1}-opt${i}`;
+                
+                const radio = document.createElement('input');
+                radio.type = 'radio';
+                radio.name = `${assessment}-q${currentQuestion+1}`;
+                radio.id = optionId;
+                radio.value = i;
+                
+                // 如果之前已回答过此题，恢复答案
+                if (assessments[assessment].answers[currentQuestion] === i) {
+                    radio.checked = true;
+                }
+                
+                const label = document.createElement('label');
+                label.className = 'option-label';
+                label.htmlFor = optionId;
+                label.textContent = i;
+                
+                optionsContainer.appendChild(radio);
+                optionsContainer.appendChild(label);
+            }
+            
+            // 更新导航按钮
+            const prevBtn = document.getElementById(`${assessment}-prev-btn`);
+            const nextBtn = document.getElementById(`${assessment}-next-btn`);
+            
+            // 第一题时禁用上一题按钮
+            if (currentQuestion === 0) {
+                prevBtn.disabled = true;
+                prevBtn.classList.add('btn-disabled');
+            } else {
+                prevBtn.disabled = false;
+                prevBtn.classList.remove('btn-disabled');
+            }
+            
+            // 最后一题时更改按钮文本
+            if (currentQuestion === totalQuestions - 1) {
+                nextBtn.textContent = '提交测评';
+            } else {
+                nextBtn.textContent = '下一题';
+            }
+        }
+
+        // 上一题
+        function prevQuestion(assessment) {
+            if (assessments[assessment].currentQuestion > 0) {
+                assessments[assessment].currentQuestion--;
+                loadQuestion(assessment);
+            }
+        }
+
+        // 下一题
+        function nextQuestion(assessment) {
+            // 检查当前题目是否已回答
+            const currentQuestion = assessments[assessment].currentQuestion;
+            const selected = document.querySelector(`input[name="${assessment}-q${currentQuestion+1}"]:checked`);
+            
+            if (!selected) {
+                alert('请先选择答案再继续！');
+                return;
+            }
+            
+            // 保存答案
+            assessments[assessment].answers[currentQuestion] = parseInt(selected.value);
+            
+            // 如果是最后一题，计算得分
+            if (currentQuestion === assessments[assessment].questions.length - 1) {
+                calculateScore(assessment);
+            } else {
+                // 否则，进入下一题
+                assessments[assessment].currentQuestion++;
+                loadQuestion(assessment);
+            }
+        }
+
+        // 计算得分并显示结果
+        function calculateScore(assessment) {
+            // 根据不同的量表调用相应的计算函数
+            switch(assessment) {
+                case 'ppq':
+                    calculatePPQScore();
+                    break;
+                case 'swls':
+                    calculateSWLSScore();
+                    break;
+                case 'mlq':
+                    calculateMLQScore();
+                    break;
+                case 'panas':
+                    calculatePANASScore();
+                    break;
+                case 'skus':
+                    calculateSKUSScore();
+                    break;
+                case 'ashs':
+                    calculateASHSScore();
+                    break;
+                case 'ers':
+                    calculateERSScore();
+                    break;
+                case 'erq':
+                    calculateERQScore();
+                    break;
+                case 'rpws':
+                    calculateRPWSScore();
+                    break;
+            }
+        }
+
+        // 计算PPQ得分
+        function calculatePPQScore() {
+            const assessment = 'ppq';
+            const answers = assessments[assessment].answers;
+            
+            // 处理反向计分题
+            for (let i = 0; i < answers.length; i++) {
+                if (assessments.ppq.reverseItems.includes(i+1)) {
+                    answers[i] = 8 - answers[i]; // 7级计分的反向计分
+                }
+            }
+            
+            // 计算各维度得分
+            const dimensionScores = {};
+            for (const [dimension, items] of Object.entries(assessments.ppq.dimensions)) {
+                dimensionScores[dimension] = items.reduce((sum, item) => sum + answers[item-1], 0);
+            }
+            
+            // 显示结果
+            showPPQResult(dimensionScores, assessment);
+        }
+
+        // 显示PPQ结果
+        function showPPQResult(scores, assessment) {
+            document.getElementById('ppq-result').style.display = 'block';
+            
+            // 创建雷达图
+            const ctx = document.getElementById('ppq-radar-chart').getContext('2d');
+            const radarChart = new Chart(ctx, {
+                type: 'radar',
+                data: {
+                    labels: Object.keys(scores),
+                    datasets: [{
+                        label: '您的得分',
+                        data: Object.values(scores),
+                        backgroundColor: 'rgba(74, 134, 232, 0.2)',
+                        borderColor: 'rgba(74, 134, 232, 1)',
+                        pointBackgroundColor: 'rgba(74, 134, 232, 1)',
+                        pointBorderColor: '#fff',
+                        pointHoverBackgroundColor: '#fff',
+                        pointHoverBorderColor: 'rgba(74, 134, 232, 1)'
+                    }]
+                },
+                options: {
+                    scale: {
+                        ticks: {
+                            beginAtZero: true,
+                            max: Math.max(...Object.values(scores)) + 5
+                        }
+                    }
+                }
+            });
+            
+            // 结果解读
+            let interpretation = "您的积极心理资本整体情况：";
+            let recommendations = "基于您的测评结果，我们建议：";
+            
+            // 根据各维度得分生成解读和建议
+            Object.entries(scores).forEach(([dimension, score]) => {
+                const maxScore = assessments.ppq.dimensions[dimension].length * 7;
+                const percentage = (score / maxScore) * 100;
+                
+                if (percentage >= 80) {
+                    interpretation += `<br>• <strong>${dimension}</strong>：表现优秀，这是您的优势领域。`;
+                    recommendations += `<br>• 继续保持并善用您的${dimension}优势。`;
+                } else if (percentage >= 60) {
+                    interpretation += `<br>• <strong>${dimension}</strong>：表现良好，有进一步提升的空间。`;
+                    recommendations += `<br>• 通过刻意练习进一步提升${dimension}。`;
+                } else {
+                    interpretation += `<br>• <strong>${dimension}</strong>：有待提升，可以重点关注。`;
+                    recommendations += `<br>• 通过学习和实践增强${dimension}能力。`;
+                }
+            });
+            
+            document.getElementById('ppq-interpretation').innerHTML = interpretation;
+            document.getElementById('ppq-recommendations').innerHTML = recommendations;
+            
+            // 保存测评记录
+            saveAssessmentResult(assessment, scores, interpretation, recommendations);
+            
+            // 滚动到结果区域
+            document.getElementById('ppq-result').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // 计算SWLS得分
+        function calculateSWLSScore() {
+            const assessment = 'swls';
+            const answers = assessments[assessment].answers;
+            
+            // 计算总分
+            const totalScore = answers.reduce((sum, score) => sum + score, 0);
+            
+            // 显示结果
+            showSWLSResult(totalScore, assessment);
+        }
+
+        // 显示SWLS结果
+        function showSWLSResult(totalScore, assessment) {
+            document.getElementById('swls-result').style.display = 'block';
+            
+            // 创建柱状图
+            const ctx = document.getElementById('swls-bar-chart').getContext('2d');
+            const barChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['生活满意度得分'],
+                    datasets: [{
+                        label: '您的得分',
+                        data: [totalScore],
+                        backgroundColor: 'rgba(106, 164, 245, 0.7)',
+                        borderColor: 'rgba(106, 164, 245, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 35
+                        }
+                    }
+                }
+            });
+            
+            // 结果解读
+            let interpretation = "";
+            let recommendations = "";
+            
+            // 根据总分确定等级
+            for (const range of assessments.swls.scoreRanges) {
+                if (totalScore >= range.min && totalScore <= range.max) {
+                    interpretation = `您的得分为${totalScore}分，属于<strong>${range.level}</strong>。${range.description}。`;
+                    
+                    // 根据得分给出建议
+                    if (totalScore >= 26) {
+                        recommendations = "继续保持积极的生活态度，关注生活中的美好事物，分享您的幸福经验给身边的人。";
+                    } else if (totalScore >= 21) {
+                        recommendations = "尝试设定一些小目标并实现它们，关注生活中的积极变化，培养感恩的心态。";
+                    } else {
+                        recommendations = "建议从小的改变开始，比如每天记录三件感恩的事情，尝试新的兴趣爱好，或者寻求专业的心理咨询支持。";
+                    }
+                    break;
+                }
+            }
+            
+            document.getElementById('swls-interpretation').innerHTML = interpretation;
+            document.getElementById('swls-recommendations').textContent = recommendations;
+            
+            // 保存测评记录
+            saveAssessmentResult(assessment, {总分: totalScore}, interpretation, recommendations);
+            
+            // 滚动到结果区域
+            document.getElementById('swls-result').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // 计算MLQ得分
+        function calculateMLQScore() {
+            const assessment = 'mlq';
+            const answers = assessments[assessment].answers;
+            
+            // 处理反向计分题
+            for (let i = 0; i < answers.length; i++) {
+                if (assessments.mlq.reverseItems.includes(i+1)) {
+                    answers[i] = 8 - answers[i]; // 7级计分的反向计分
+                }
+            }
+            
+            // 计算各维度得分
+            const dimensionScores = {};
+            for (const [dimension, items] of Object.entries(assessments.mlq.dimensions)) {
+                dimensionScores[dimension] = items.reduce((sum, item) => sum + answers[item-1], 0);
+            }
+            
+            // 显示结果
+            showMLQResult(dimensionScores, assessment);
+        }
+
+        // 显示MLQ结果
+        function showMLQResult(scores, assessment) {
+            document.getElementById('mlq-result').style.display = 'block';
+            
+            // 创建散点图
+            const ctx = document.getElementById('mlq-scatter-chart').getContext('2d');
+            const scatterChart = new Chart(ctx, {
+                type: 'scatter',
+                data: {
+                    datasets: [{
+                        label: '您的得分',
+                        data: [{
+                            x: scores['拥有意义感'],
+                            y: scores['寻求意义感']
+                        }],
+                        backgroundColor: 'rgba(74, 134, 232, 0.7)',
+                        pointRadius: 10,
+                        pointHoverRadius: 15
+                    }]
+                },
+                options: {
+                    scales: {
+                        x: {
+                            title: {
+                                display: true,
+                                text: '拥有意义感'
+                            },
+                            min: 5,
+                            max: 35
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: '寻求意义感'
+                            },
+                            min: 5,
+                            max: 35
+                        }
+                    }
+                }
+            });
+            
+            // 结果解读
+            let interpretation = "";
+            let recommendations = "";
+            
+            const haveScore = scores['拥有意义感'];
+            const seekScore = scores['寻求意义感'];
+            
+            if (haveScore >= 25 && seekScore <= 20) {
+                interpretation = "您属于<strong>高拥有意义感 + 低寻求意义感</strong>类型。您已清晰感知生命意义，无需过度探索，可专注'践行意义'。";
+                recommendations = "建议您将现有的意义感付诸实践，在行动中深化对生命意义的理解。";
+            } else if (haveScore <= 20 && seekScore >= 25) {
+                interpretation = "您属于<strong>低拥有意义感 + 高寻求意义感</strong>类型。您正在主动探索人生方向，寻找生命的意义。";
+                recommendations = "建议您保持探索精神，尝试不同的人生体验，同时关注当下的生活，从小事中寻找意义。";
+            } else if (haveScore >= 25 && seekScore >= 25) {
+                interpretation = "您属于<strong>高拥有意义感 + 高寻求意义感</strong>类型。您在现有意义基础上探索新可能，这是一种积极状态。";
+                recommendations = "建议您在保持现有意义感的同时，继续探索新的可能性，实现个人成长。";
+            } else {
+                interpretation = "您属于<strong>低拥有意义感 + 低寻求意义感</strong>类型。这可能是暂时的迷茫状态，需要引导'轻探索'。";
+                recommendations = "建议您从小的改变开始，尝试新的事物，逐步发现生活中的意义。";
+            }
+            
+            interpretation += `<br>您的拥有意义感得分为${haveScore}，寻求意义感得分为${seekScore}。`;
+            
+            document.getElementById('mlq-interpretation').innerHTML = interpretation;
+            document.getElementById('mlq-recommendations').textContent = recommendations;
+            
+            // 保存测评记录
+            saveAssessmentResult(assessment, scores, interpretation, recommendations);
+            
+            // 滚动到结果区域
+            document.getElementById('mlq-result').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // 计算PANAS得分
+        function calculatePANASScore() {
+            const assessment = 'panas';
+            const answers = assessments[assessment].answers;
+            
+            // 计算各维度得分
+            const dimensionScores = {};
+            for (const [dimension, items] of Object.entries(assessments.panas.dimensions)) {
+                dimensionScores[dimension] = items.reduce((sum, item) => sum + answers[item-1], 0);
+            }
+            
+            // 显示结果
+            showPANASResult(dimensionScores, assessment);
+        }
+
+        // 显示PANAS结果
+        function showPANASResult(scores, assessment) {
+            document.getElementById('panas-result').style.display = 'block';
+            
+            // 创建柱状图
+            const ctx = document.getElementById('panas-bar-chart').getContext('2d');
+            const barChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: Object.keys(scores),
+                    datasets: [{
+                        label: '您的得分',
+                        data: Object.values(scores),
+                        backgroundColor: [
+                            'rgba(106, 164, 245, 0.7)',
+                            'rgba(74, 134, 232, 0.7)'
+                        ],
+                        borderColor: [
+                            'rgba(106, 164, 245, 1)',
+                            'rgba(74, 134, 232, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 50
+                        }
+                    }
+                }
+            });
+            
+            // 结果解读
+            let interpretation = "";
+            let recommendations = "";
+            
+            const paScore = scores['积极情绪'];
+            const naScore = scores['消极情绪'];
+            
+            interpretation = `您的积极情绪得分为${paScore}，消极情绪得分为${naScore}。`;
+            
+            if (paScore >= 35 && naScore <= 20) {
+                interpretation += "您当前处于<strong>高积极情绪 + 低消极情绪</strong>状态，情绪状态非常健康。";
+                recommendations = "继续保持积极的生活方式，您的情绪状态非常有利于身心健康和个人发展。";
+            } else if (paScore >= 35 && naScore >= 25) {
+                interpretation += "您当前处于<strong>高积极情绪 + 高消极情绪</strong>状态，情绪体验丰富但可能内心矛盾。";
+                recommendations = "建议您关注情绪管理，学习平衡积极与消极情绪，寻找情绪的来源并适当调节。";
+            } else if (paScore <= 25 && naScore >= 25) {
+                interpretation += "您当前处于<strong>低积极情绪 + 高消极情绪</strong>状态，可能需要关注情绪健康。";
+                recommendations = "建议您尝试增加积极情绪体验，如运动、社交、兴趣爱好等，同时学习应对消极情绪的方法。";
+            } else {
+                interpretation += "您当前处于<strong>低积极情绪 + 低消极情绪</strong>状态，情绪体验较为平淡。";
+                recommendations = "建议您尝试增加生活中的积极体验，培养兴趣爱好，丰富情感生活。";
+            }
+            
+            document.getElementById('panas-interpretation').innerHTML = interpretation;
+            document.getElementById('panas-recommendations').textContent = recommendations;
+            
+            // 保存测评记录
+            saveAssessmentResult(assessment, scores, interpretation, recommendations);
+            
+            // 滚动到结果区域
+            document.getElementById('panas-result').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // 计算SKUS得分
+        function calculateSKUSScore() {
+            const assessment = 'skus';
+            const answers = assessments[assessment].answers;
+            
+            // 计算各维度得分
+            const dimensionScores = {};
+            for (const [dimension, items] of Object.entries(assessments.skus.dimensions)) {
+                dimensionScores[dimension] = items.reduce((sum, item) => sum + answers[item-1], 0);
+            }
+            
+            // 显示结果
+            showSKUSResult(dimensionScores, assessment);
+        }
+
+        // 显示SKUS结果
+        function showSKUSResult(scores, assessment) {
+            document.getElementById('skus-result').style.display = 'block';
+            
+            // 创建柱状图
+            const ctx = document.getElementById('skus-bar-chart').getContext('2d');
+            const barChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: Object.keys(scores),
+                    datasets: [{
+                        label: '您的得分',
+                        data: Object.values(scores),
+                        backgroundColor: [
+                            'rgba(106, 164, 245, 0.7)',
+                            'rgba(74, 134, 232, 0.7)'
+                        ],
+                        borderColor: [
+                            'rgba(106, 164, 245, 1)',
+                            'rgba(74, 134, 232, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: Math.max(...Object.values(scores)) + 10
+                        }
+                    }
+                }
+            });
+            
+            // 结果解读
+            let interpretation = "";
+            let recommendations = "";
+            
+            const knowledgeScore = scores['优势知识'];
+            const useScore = scores['优势使用'];
+            
+            interpretation = `您的优势知识得分为${knowledgeScore}，优势使用得分为${useScore}。`;
+            
+            const knowledgePercentage = (knowledgeScore / (7 * 7)) * 100;
+            const usePercentage = (useScore / (14 * 7)) * 100;
+            
+            if (knowledgePercentage >= 70 && usePercentage >= 70) {
+                interpretation += "您对自身优势有很好的认知，并且能够有效运用这些优势。";
+                recommendations = "继续保持对自身优势的认知和应用，尝试在新的领域应用您的优势。";
+            } else if (knowledgePercentage >= 70 && usePercentage < 70) {
+                interpretation += "您对自身优势有较好的认知，但在实际运用方面还有提升空间。";
+                recommendations = "建议您有意识地增加优势使用的机会，将认知转化为行动。";
+            } else if (knowledgePercentage < 70 && usePercentage >= 70) {
+                interpretation += "您在实践中能够运用自身优势，但对优势的认知有待提升。";
+                recommendations = "建议您花时间反思和识别自己的核心优势，这将帮助您更有效地运用它们。";
+            } else {
+                interpretation += "您在优势认知和运用方面都有提升空间。";
+                recommendations = "建议您从识别自身优势开始，逐步增加优势使用的频率和范围。";
+            }
+            
+            document.getElementById('skus-interpretation').innerHTML = interpretation;
+            document.getElementById('skus-recommendations').textContent = recommendations;
+            
+            // 保存测评记录
+            saveAssessmentResult(assessment, scores, interpretation, recommendations);
+            
+            // 滚动到结果区域
+            document.getElementById('skus-result').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // 计算ASHS得分
+        function calculateASHSScore() {
+            const assessment = 'ashs';
+            const answers = assessments[assessment].answers;
+            
+            // 计算各维度得分
+            const dimensionScores = {};
+            for (const [dimension, items] of Object.entries(assessments.ashs.dimensions)) {
+                dimensionScores[dimension] = items.reduce((sum, item) => sum + answers[item-1], 0);
+            }
+            
+            // 显示结果
+            showASHSResult(dimensionScores, assessment);
+        }
+
+        // 显示ASHS结果
+        function showASHSResult(scores, assessment) {
+            document.getElementById('ashs-result').style.display = 'block';
+            
+            // 创建柱状图
+            const ctx = document.getElementById('ashs-bar-chart').getContext('2d');
+            const barChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: Object.keys(scores),
+                    datasets: [{
+                        label: '您的得分',
+                        data: Object.values(scores),
+                        backgroundColor: [
+                            'rgba(106, 164, 245, 0.7)',
+                            'rgba(74, 134, 232, 0.7)'
+                        ],
+                        borderColor: [
+                            'rgba(106, 164, 245, 1)',
+                            'rgba(74, 134, 232, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 24
+                        }
+                    }
+                }
+            });
+            
+            // 结果解读
+            let interpretation = "";
+            let recommendations = "";
+            
+            const pathwayScore = scores['路径思维'];
+            const agencyScore = scores['动力思维'];
+            
+            interpretation = `您的路径思维得分为${pathwayScore}，动力思维得分为${agencyScore}。`;
+            
+            const pathwayPercentage = (pathwayScore / (3 * 8)) * 100;
+            const agencyPercentage = (agencyScore / (3 * 8)) * 100;
+            
+            if (pathwayPercentage >= 70 && agencyPercentage >= 70) {
+                interpretation += "您的希望水平很高，既有明确的目标路径，也有实现目标的动力。";
+                recommendations = "继续保持这种积极状态，将希望转化为实际行动和成果。";
+            } else if (pathwayPercentage >= 70 && agencyPercentage < 70) {
+                interpretation += "您有明确的目标路径，但在实现目标的动力方面有待提升。";
+                recommendations = "建议您增强内在动机，寻找目标对您的个人意义，提升行动力。";
+            } else if (pathwayPercentage < 70 && agencyPercentage >= 70) {
+                interpretation += "您有实现目标的动力，但在寻找有效路径方面需要加强。";
+                recommendations = "建议您学习目标规划和路径设计，将大目标分解为可行的小步骤。";
+            } else {
+                interpretation += "您在希望的两个维度都有提升空间。";
+                recommendations = "建议您从设定明确可行的目标开始，同时培养实现目标的动力和信心。";
+            }
+            
+            document.getElementById('ashs-interpretation').innerHTML = interpretation;
+            document.getElementById('ashs-recommendations').textContent = recommendations;
+            
+            // 保存测评记录
+            saveAssessmentResult(assessment, scores, interpretation, recommendations);
+            
+            // 滚动到结果区域
+            document.getElementById('ashs-result').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // 计算ERS得分
+        function calculateERSScore() {
+            const assessment = 'ers';
+            const answers = assessments[assessment].answers;
+            
+            // 计算总分
+            const totalScore = answers.reduce((sum, score) => sum + score, 0);
+            
+            // 显示结果
+            showERSResult(totalScore, assessment);
+        }
+
+        // 显示ERS结果
+        function showERSResult(totalScore, assessment) {
+            document.getElementById('ers-result').style.display = 'block';
+            
+            // 创建仪表盘图
+            const ctx = document.getElementById('ers-gauge-chart').getContext('2d');
+            const gaugeChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['您的得分', '剩余'],
+                    datasets: [{
+                        data: [totalScore, 56 - totalScore],
+                        backgroundColor: [
+                            'rgba(106, 164, 245, 0.7)',
+                            'rgba(240, 240, 240, 0.7)'
+                        ],
+                        borderColor: [
+                            'rgba(106, 164, 245, 1)',
+                            'rgba(240, 240, 240, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    cutout: '70%',
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return `得分: ${context.parsed}`;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+            
+            // 结果解读
+            let interpretation = "";
+            let recommendations = "";
+            
+            // 根据总分确定等级
+            for (const range of assessments.ers.scoreRanges) {
+                if (totalScore >= range.min && totalScore <= range.max) {
+                    interpretation = `您的得分为${totalScore}分，属于<strong>${range.level}</strong>。${range.description}。`;
+                    
+                    if (totalScore >= 35) {
+                        recommendations = "继续保持积极的心态和应对策略，您的心理弹性是您应对挑战的重要资源。";
+                    } else if (totalScore >= 23) {
+                        recommendations = "建议您学习更多的压力管理技巧，进一步提升心理弹性。";
+                    } else {
+                        recommendations = "建议您关注心理健康，学习有效的应对策略，必要时寻求专业支持。";
+                    }
+                    break;
+                }
+            }
+            
+            document.getElementById('ers-interpretation').innerHTML = interpretation;
+            document.getElementById('ers-recommendations').textContent = recommendations;
+            
+            // 保存测评记录
+            saveAssessmentResult(assessment, {总分: totalScore}, interpretation, recommendations);
+            
+            // 滚动到结果区域
+            document.getElementById('ers-result').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // 计算ERQ得分
+        function calculateERQScore() {
+            const assessment = 'erq';
+            const answers = assessments[assessment].answers;
+            
+            // 计算各维度得分
+            const dimensionScores = {};
+            for (const [dimension, items] of Object.entries(assessments.erq.dimensions)) {
+                dimensionScores[dimension] = items.reduce((sum, item) => sum + answers[item-1], 0);
+            }
+            
+            // 显示结果
+            showERQResult(dimensionScores, assessment);
+        }
+
+        // 显示ERQ结果
+        function showERQResult(scores, assessment) {
+            document.getElementById('erq-result').style.display = 'block';
+            
+            // 创建雷达图
+            const ctx = document.getElementById('erq-radar-chart').getContext('2d');
+            const radarChart = new Chart(ctx, {
+                type: 'radar',
+                data: {
+                    labels: Object.keys(scores),
+                    datasets: [{
+                        label: '您的得分',
+                        data: Object.values(scores),
+                        backgroundColor: 'rgba(74, 134, 232, 0.2)',
+                        borderColor: 'rgba(74, 134, 232, 1)',
+                        pointBackgroundColor: 'rgba(74, 134, 232, 1)',
+                        pointBorderColor: '#fff',
+                        pointHoverBackgroundColor: '#fff',
+                        pointHoverBorderColor: 'rgba(74, 134, 232, 1)'
+                    }]
+                },
+                options: {
+                    scale: {
+                        ticks: {
+                            beginAtZero: true,
+                            max: Math.max(...Object.values(scores)) + 5
+                        }
+                    }
+                }
+            });
+            
+            // 结果解读
+            let interpretation = "";
+            let recommendations = "";
+            
+            const reappraisalScore = scores['认知重评'];
+            const suppressionScore = scores['表达抑制'];
+            
+            interpretation = `您的认知重评得分为${reappraisalScore}，表达抑制得分为${suppressionScore}。`;
+            
+            const reappraisalPercentage = (reappraisalScore / (6 * 7)) * 100;
+            const suppressionPercentage = (suppressionScore / (4 * 7)) * 100;
+            
+            if (reappraisalPercentage >= 60 && suppressionPercentage < 50) {
+                interpretation += "您主要使用认知重评策略来调节情绪，这是一种较为健康的情绪调节方式。";
+                recommendations = "继续保持使用认知重评策略，这有助于您更好地管理情绪。";
+            } else if (reappraisalPercentage < 50 && suppressionPercentage >= 60) {
+                interpretation += "您主要使用表达抑制策略来调节情绪，这可能在某些情境下有效，但长期使用可能带来压力。";
+                recommendations = "建议您尝试增加认知重评策略的使用，学习从不同角度理解情绪事件。";
+            } else if (reappraisalPercentage >= 60 && suppressionPercentage >= 60) {
+                interpretation += "您同时使用认知重评和表达抑制两种策略，能够灵活应对不同情境。";
+                recommendations = "继续保持这种灵活性，根据情境选择最合适的情绪调节策略。";
+            } else {
+                interpretation += "您在情绪调节策略的使用方面有待提升。";
+                recommendations = "建议您学习更多情绪调节策略，特别是认知重评策略，以更有效地管理情绪。";
+            }
+            
+            interpretation += "<br>情绪调节策略无绝对好坏，关键在于适应情境和个人需求。";
+            
+            document.getElementById('erq-interpretation').innerHTML = interpretation;
+            document.getElementById('erq-recommendations').textContent = recommendations;
+            
+            // 保存测评记录
+            saveAssessmentResult(assessment, scores, interpretation, recommendations);
+            
+            // 滚动到结果区域
+            document.getElementById('erq-result').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // 计算RPWS得分
+        function calculateRPWSScore() {
+            const assessment = 'rpws';
+            const answers = assessments[assessment].answers;
+            
+            // 计算各维度得分
+            const dimensionScores = {};
+            for (const [dimension, items] of Object.entries(assessments.rpws.dimensions)) {
+                dimensionScores[dimension] = items.reduce((sum, item) => sum + answers[item-1], 0);
+            }
+            
+            // 显示结果
+            showRPWSResult(dimensionScores, assessment);
+        }
+
+        // 显示RPWS结果
+        function showRPWSResult(scores, assessment) {
+            document.getElementById('rpws-result').style.display = 'block';
+            
+            // 创建雷达图
+            const ctx = document.getElementById('rpws-radar-chart').getContext('2d');
+            const radarChart = new Chart(ctx, {
+                type: 'radar',
+                data: {
+                    labels: Object.keys(scores),
+                    datasets: [{
+                        label: '您的得分',
+                        data: Object.values(scores),
+                        backgroundColor: 'rgba(74, 134, 232, 0.2)',
+                        borderColor: 'rgba(74, 134, 232, 1)',
+                        pointBackgroundColor: 'rgba(74, 134, 232, 1)',
+                        pointBorderColor: '#fff',
+                        pointHoverBackgroundColor: '#fff',
+                        pointHoverBorderColor: 'rgba(74, 134, 232, 1)'
+                    }]
+                },
+                options: {
+                    scale: {
+                        ticks: {
+                            beginAtZero: true,
+                            max: 18
+                        }
+                    }
+                }
+            });
+            
+            // 结果解读
+            let interpretation = "您的心理幸福感各维度情况：";
+            let recommendations = "基于您的测评结果，我们建议：";
+            
+            // 根据各维度得分生成解读和建议
+            Object.entries(scores).forEach(([dimension, score]) => {
+                const maxScore = assessments.rpws.dimensions[dimension].length * 6;
+                const percentage = (score / maxScore) * 100;
+                
+                if (percentage >= 75) {
+                    interpretation += `<br>• <strong>${dimension}</strong>：表现优秀，这是您的优势领域。`;
+                    recommendations += `<br>• 继续保持并善用您的${dimension}优势。`;
+                } else if (percentage >= 50) {
+                    interpretation += `<br>• <strong>${dimension}</strong>：表现良好，有进一步提升的空间。`;
+                    recommendations += `<br>• 通过刻意练习进一步提升${dimension}。`;
+                } else {
+                    interpretation += `<br>• <strong>${dimension}</strong>：有待提升，可以重点关注。`;
+                    recommendations += `<br>• 通过学习和实践增强${dimension}能力。`;
+                }
+            });
+            
+            document.getElementById('rpws-interpretation').innerHTML = interpretation;
+            document.getElementById('rpws-recommendations').innerHTML = recommendations;
+            
+            // 保存测评记录
+            saveAssessmentResult(assessment, scores, interpretation, recommendations);
+            
+            // 滚动到结果区域
+            document.getElementById('rpws-result').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // 保存测评结果到本地存储
+        function saveAssessmentResult(assessment, scores, interpretation, recommendations) {
+            const result = {
+                id: Date.now(),
+                assessment: assessment,
+                title: assessments[assessment].title,
+                scores: scores,
+                interpretation: interpretation,
+                recommendations: recommendations,
+                date: new Date().toLocaleDateString('zh-CN')
+            };
+            
+            userArchives.push(result);
+            localStorage.setItem('psychologicalAssessments', JSON.stringify(userArchives));
+        }
+
+        // 加载测评记录
+        function loadArchives() {
+            const archivesList = document.getElementById('archives-list');
+            archivesList.innerHTML = '';
+            
+            if (userArchives.length === 0) {
+                archivesList.innerHTML = '<p style="text-align: center; color: #666; padding: 2rem;">您还没有完成任何测评，快去心理测评页面开始吧！</p>';
+                return;
+            }
+            
+            // 按日期倒序排列
+            userArchives.sort((a, b) => b.id - a.id);
+            
+            userArchives.forEach(archive => {
+                const archiveCard = document.createElement('div');
+                archiveCard.className = 'archive-card';
+                
+                let scoreText = '';
+                if (typeof archive.scores === 'object') {
+                    scoreText = Object.entries(archive.scores)
+                        .map(([dim, score]) => `${dim}: ${score}`)
+                        .join(', ');
+                } else {
+                    scoreText = `总分: ${archive.scores}`;
+                }
+                
+                archiveCard.innerHTML = `
+                    <h3>${archive.title}</h3>
+                    <p>${scoreText}</p>
+                    <p>${archive.interpretation.substring(0, 100)}...</p>
+                    <div class="archive-date">测评日期: ${archive.date}</div>
+                `;
+                
+                archivesList.appendChild(archiveCard);
+            });
+            
+            // 更新综合分析
+            updateComprehensiveAnalysis();
+        }
+
+        // 更新综合分析
+        function updateComprehensiveAnalysis() {
+            const analysisContent = document.getElementById('comprehensive-analysis-content');
+            
+            if (userArchives.length < 3) {
+                analysisContent.innerHTML = '<p>您还没有完成足够的测评来生成综合分析。完成至少3个不同类型的测评后，系统将为您生成全面的心理状态分析。</p>';
+                return;
+            }
+            
+            // 简单的综合分析逻辑
+            let positiveCount = 0;
+            let improvementCount = 0;
+            let totalAssessments = userArchives.length;
+            
+            userArchives.forEach(archive => {
+                // 这里可以根据实际得分进行更复杂的分析
+                if (archive.assessment === 'swls') {
+                    const score = archive.scores.总分 || Object.values(archive.scores)[0];
+                    if (score >= 21) positiveCount++;
+                    else improvementCount++;
+                } else if (archive.assessment === 'ppq') {
+                    const scores = archive.scores;
+                    const avgScore = Object.values(scores).reduce((a, b) => a + b, 0) / Object.values(scores).length;
+                    if (avgScore >= 24) positiveCount++;
+                    else improvementCount++;
+                } else {
+                    // 其他量表简单判断
+                    const score = archive.scores.总分 || Object.values(archive.scores)[0];
+                    if (score >= 24) positiveCount++;
+                    else improvementCount++;
+                }
+            });
+            
+            const positivePercentage = (positiveCount / totalAssessments) * 100;
+            
+            let analysisText = '';
+            if (positivePercentage >= 70) {
+                analysisText = `
+                    <p>根据您的测评记录分析，您的整体心理状态<strong>非常积极健康</strong>。您在${positiveCount}个测评中表现出色，显示出良好的心理适应能力和积极心态。</p>
+                    <p>建议继续保持现有的生活方式和心理习惯，同时可以尝试帮助身边的人提升心理健康水平。</p>
+                `;
+            } else if (positivePercentage >= 50) {
+                analysisText = `
+                    <p>根据您的测评记录分析，您的心理状态<strong>总体良好</strong>。您在${positiveCount}个测评中表现良好，但在某些方面还有提升空间。</p>
+                    <p>建议关注那些得分较低的测评领域，有针对性地进行心理锻炼和习惯培养。</p>
+                `;
+            } else {
+                analysisText = `
+                    <p>根据您的测评记录分析，您的心理状态<strong>需要关注</strong>。您在${improvementCount}个测评中有提升空间，建议重点关注这些方面。</p>
+                    <p>可以考虑寻求专业心理支持，或通过系统的心理训练来提升整体心理健康水平。</p>
+                `;
+            }
+            
+            analysisText += `<p>您已完成${totalAssessments}个测评，其中${positiveCount}个表现良好，${improvementCount}个有提升空间。</p>`;
+            
+            analysisContent.innerHTML = analysisText;
+        }
+
+        // 初始化页面
+        function initPage() {
+            // 加载测评记录
+            loadArchives();
+        }
+
+        // 页面加载完成后初始化
+        window.onload = initPage;
+    </script>
+</body>
+</html>
